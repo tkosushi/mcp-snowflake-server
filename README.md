@@ -115,14 +115,15 @@ npx -y @smithery/cli install mcp_snowflake_server --client claude
           "the_warehouse",
           "--user",
           "the_user",
-          "--password",
-          "their_password",
+          "--private_key_path",
+          "user generated private key's path",
           "--role",
           "the_role"
           "--database",
           "the_database",
           "--schema",
           "the_schema",
+          # Optionally: "--private_key_password"
           # Optionally: "--allow_write" (but not recommended)
           # Optionally: "--log_dir", "/absolute/path/to/logs"
           # Optionally: "--log_level", "DEBUG"/"INFO"/"WARNING"/"ERROR"/"CRITICAL"

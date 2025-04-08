@@ -6,6 +6,8 @@ import time
 import uuid
 from functools import wraps
 from typing import Any, Callable
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
 
 import mcp.server.stdio
 import mcp.types as types
@@ -253,6 +255,23 @@ async def main(
     log_level: str = "INFO",
     exclude_tools: list[str] = [],
 ):
+    with open(connection_args["private_key_path"], "rb") as key:
+        private_key = serialization.load_pem_private_key(
+            key.read(),
+            password=None if "private_key_password" not in connection_args
+            else connection_args["private_key_password"].encode(),
+            backend=default_backend()
+        )
+    pkb = private_key.private_bytes(
+        encoding=serialization.Encoding.DER,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+    connection_args["private_key"] = pkb
+    del connection_args["private_key_path"]
+    if "private_key_password" in connection_args:
+        del connection_args["private_key_password"]
+
     # Setup logging
     if log_dir:
         os.makedirs(log_dir, exist_ok=True)

@@ -92,6 +92,9 @@ def main():
     assert (
         "schema" in connection_args
     ), 'You must provide the username as "--schema" argument or "SNOWFLAKE_SCHEMA" environment variable. This MCP server can only operate on a single schema.'
+    assert (
+        "private_key_path" in connection_args
+    ), 'You must provide the private key path as "--private_key_path" argument.'
 
     asyncio.run(
         server.main(
